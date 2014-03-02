@@ -1,0 +1,7 @@
+#A decimal to binary converter routine
+def dectobin(n):
+    if n==0: return ''
+    else:
+        return dectobin(n/2) + str(n%2)
+
+print(dectobin(845))
