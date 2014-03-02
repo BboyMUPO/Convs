@@ -1,0 +1,73 @@
+#A c++ to python code converter
+#It's not perfect but does most of the work
+
+import re
+
+def process_line(line):
+        
+    line = re.sub(';$', '', line)
+    
+    line = re.sub('\s*{$', '', line) 
+    
+    line = re.sub('\s*}$', '', line) 
+    
+    line = re.sub('//', '#', line) 
+    
+    line = re.sub('/\*', "'''", line) 
+    
+    line = re.sub('\*/', "'''", line) 
+    
+    line = re.sub('\|\|', 'or', line)
+    
+    line = re.sub('&&', 'and', line)
+    
+    line = re.sub('!([^=\n])', 'not \\1', line) 
+    
+    line = re.sub('->', '.', line) 
+        
+    line = re.sub('false', 'False', line)
+    
+    line = re.sub('true', 'True', line) 
+    
+    line = re.sub('const ', ' ', line)
+    
+    line = re.sub(' const$', '', line)
+    
+    line = re.sub('if\s*\((.*)\)$', 'if \\1:', line)
+    
+    line = re.sub('if\s*\((.*)\)$', 'if \\1:', line)
+    #return line
+    line = re.sub('^[\w:&<>\*]+\s+([\w:]+)\(([^\)]*\))$', 'def \\1(self, \\2:', line)
+    
+    
+    line = re.sub('\(\s*self,\s*\)', '(self)', line)
+    
+    line = re.sub(',\s*[\w\d:&\*<>]+\s+([\w\d:&\*]+)', ', \\1', line)
+    
+    line = re.sub('[\w\d:&\*]+\s+([\w\d]+)\s*= ', '\\1 = ', line)
+    
+    line = re.sub('^def [\w\d]+::([\w\d]+\([^\)]*\):)$', 'def \\1', line)
+    
+    line = re.sub('::', '.', line) 
+    
+    line = re.sub('else\s+if', 'elif', line) 
+    
+    line = re.sub('else\s*$', 'else:\n', line)
+    
+    line = re.sub(' new ', ' ', line)
+        
+    line = re.sub('foreach\s*\(\s*[\w\d:&\*]+\s+([\w\d]+)\s*,\s*([\w\d\.\(\)]+)\s*\)', 'for \\1 in \\2:', line)
+    
+    line = re.sub('emit ([\w\d]+)', '\\1.emit', line)
+    
+    line = re.sub('connect\s*\(\s*([^,]+)\s*,\s*' + \
+                'SIGNAL\s*\(\s*([\w\d]+)[^\)]+\)\s*\)\s*,'+ \
+                '\s*([^,]+)\s*,\s*' + \
+                'S[A-Z]+\s*\(\s*([\w\d]+)[^\)]+\)\s*\)\s*\)',
+              '\\1.\\2.connect(\\3.\\4)', line)
+              
+    print(line) 
+
+line1=raw_input()
+
+process_line(line1)
